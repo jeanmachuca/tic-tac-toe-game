@@ -80,5 +80,5 @@ const Profile = (() => {
     `;
   }
 
-  return { recordWin, recordLoss, recordDraw, renderCompact, renderFull, getStats, resetStats };
+  return { recordWin, recordLoss, recordDraw, renderCompact, renderFull, renderAvatar, getStats, resetStats };
 })();
