@@ -4,14 +4,145 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profile - Tic-Tac-Toe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <script src="config.js"></script>
+  <style>
+    .profile-page {
+      position: relative;
+      z-index: 5;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      min-height: 100vh;
+    }
+
+    .profile-container {
+      background: var(--glass-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 2.5rem;
+      text-align: center;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+      max-width: 500px;
+      width: 100%;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-family: var(--font-display);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover {
+      color: var(--text-primary);
+    }
+
+    .profile-card h2 {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--text-primary);
+      margin-top: 1rem;
+    }
+
+    .profile-email {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      margin: 0.3rem 0 1.5rem;
+      opacity: 0.6;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.8rem;
+      margin: 1.5rem 0;
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0.8rem 0.4rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .stat-val {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .stat-val.wins { color: var(--neon-blue); }
+    .stat-val.losses { color: var(--neon-pink); }
+    .stat-val.draws { color: var(--text-secondary); }
+
+    .stat-lbl {
+      font-size: 0.55rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-top: 0.2rem;
+      opacity: 0.6;
+    }
+
+    .reset-sm {
+      font-family: var(--font-display);
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--glass-border);
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+
+    .reset-sm:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    @media (max-width: 480px) {
+      .profile-container {
+        padding: 1.5rem;
+      }
+      .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  </style>
 </head>
 <body>
-  <div class="profile-page" id="profileRoot">
-    <a href="index.html" class="back-link">&larr; Back to Game</a>
-    <div id="profileContent">
-      <p style="color:#8080aa">Loading...</p>
+  <div class="parallax-bg"></div>
+  <div class="overlay"></div>
+
+  <div class="profile-page">
+    <div class="profile-container">
+      <a href="index.html" class="back-link">&larr; Game</a>
+      <div id="profileContent">
+        <p style="color:var(--text-secondary);font-size:0.85rem">Loading...</p>
+      </div>
     </div>
   </div>
 
@@ -24,8 +155,9 @@
       if (!user) {
         el.innerHTML = `
           <div class="profile-card">
-            <h2>Sign in to view your profile</h2>
-            <div id="loginPrompt" style="margin-top:1.5rem"></div>
+            <h2>Sign In</h2>
+            <p style="color:var(--text-secondary);font-size:0.85rem;margin:0.5rem 0 1.5rem">Sign in to view your profile</p>
+            <div id="loginPrompt"></div>
           </div>
         `;
         Auth.renderButton('loginPrompt');
