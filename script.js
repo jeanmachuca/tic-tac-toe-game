@@ -29,8 +29,8 @@ function init() {
 function render() {
   document.querySelectorAll('.cell').forEach((cell, i) => {
     const mark = board[i];
-    cell.textContent = '';
     cell.className = 'cell' + (mark ? ' taken ' + mark.toLowerCase() : '');
+    cell.textContent = mark || '';
     if (mark && !cell.classList.contains('pop-in')) {
       cell.classList.add('pop-in');
     }
