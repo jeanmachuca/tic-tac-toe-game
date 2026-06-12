@@ -1,0 +1,22 @@
+{
+  "name": "Tic-Tac-Toe",
+  "short_name": "TicTacToe",
+  "description": "A neon-themed Tic-Tac-Toe game with Google Sign-In",
+  "start_url": "/tic-tac-toe-game/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0a1a",
+  "theme_color": "#0a0a1a",
+  "icons": [
+    {
+      "src": "icon-192.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icon-512.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512"
+    }
+  ]
+}
