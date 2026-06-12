@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile - Tic-Tac-Toe</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="config.js"></script>
+</head>
+<body>
+  <div class="profile-page" id="profileRoot">
+    <a href="index.html" class="back-link">&larr; Back to Game</a>
+    <div id="profileContent">
+      <p style="color:#8080aa">Loading...</p>
+    </div>
+  </div>
+
+  <script src="https://accounts.google.com/gsi/client"></script>
+  <script src="auth.js"></script>
+  <script src="profile.js"></script>
+  <script>
+    function renderProfile(user) {
+      const el = document.getElementById('profileContent');
+      if (!user) {
+        el.innerHTML = `
+          <div class="profile-card">
+            <h2>Sign in to view your profile</h2>
+            <div id="loginPrompt" style="margin-top:1.5rem"></div>
+          </div>
+        `;
+        Auth.renderButton('loginPrompt');
+        return;
+      }
+      el.innerHTML = Profile.renderFull(user);
+    }
+
+    renderProfile(Auth.getUser());
+    Auth.onAuthChange(renderProfile);
+  </script>
+</body>
+</html>
