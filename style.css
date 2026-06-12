@@ -1,0 +1,116 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  text-align: center;
+  padding: 2rem;
+}
+
+h1 {
+  color: #fff;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  font-weight: 300;
+  letter-spacing: 2px;
+}
+
+.status {
+  color: #a0a0cc;
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  min-height: 1.8rem;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  grid-template-rows: repeat(3, 100px);
+  gap: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.cell {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.cell:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.cell:active {
+  transform: scale(0.95);
+}
+
+.cell.x {
+  color: #64ffda;
+  text-shadow: 0 0 15px rgba(100, 255, 218, 0.5);
+}
+
+.cell.o {
+  color: #ff6b9d;
+  text-shadow: 0 0 15px rgba(255, 107, 157, 0.5);
+}
+
+.cell.win {
+  background: rgba(100, 255, 218, 0.15);
+  border-color: #64ffda;
+}
+
+.cell.taken {
+  cursor: default;
+}
+
+.scoreboard {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  color: #a0a0cc;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+.scoreboard span {
+  min-width: 80px;
+}
+
+.reset {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+  letter-spacing: 1px;
+}
+
+.reset:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.reset:active {
+  transform: scale(0.97);
+}
