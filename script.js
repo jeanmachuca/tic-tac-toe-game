@@ -1,11 +1,11 @@
 const boardEl = document.getElementById('board');
 const statusEl = document.getElementById('status');
 const resetBtn = document.getElementById('resetBtn');
-const scoreXEl = document.getElementById('scoreX');
-const scoreOEl = document.getElementById('scoreO');
+const scoreWinsEl = document.getElementById('scoreWins');
+const scoreLossesEl = document.getElementById('scoreLosses');
 const scoreDrawEl = document.getElementById('scoreDraw');
 
-let board, currentPlayer, gameActive, scores;
+let board, currentPlayer, gameActive;
 
 const winPatterns = [
   [0,1,2], [3,4,5], [6,7,8],
@@ -17,7 +17,6 @@ function init() {
   board = Array(9).fill(null);
   currentPlayer = 'X';
   gameActive = true;
-  scores = { X: 0, O: 0, draw: 0 };
   render();
 }
 
@@ -30,9 +29,10 @@ function render() {
   statusEl.textContent = gameActive
     ? `Player ${currentPlayer}'s turn`
     : statusEl.textContent;
-  scoreXEl.textContent = scores.X;
-  scoreOEl.textContent = scores.O;
-  scoreDrawEl.textContent = scores.draw;
+  const stats = Profile.getStats();
+  scoreWinsEl.textContent = stats.wins;
+  scoreLossesEl.textContent = stats.losses;
+  scoreDrawEl.textContent = stats.draws;
 }
 
 function checkWinner() {
@@ -62,10 +62,11 @@ function handleMove(e) {
   if (result) {
     gameActive = false;
     if (result.winner === 'draw') {
-      scores.draw++;
+      Profile.recordDraw();
       statusEl.textContent = "It's a draw!";
     } else {
-      scores[result.winner]++;
+      if (result.winner === 'X') Profile.recordWin();
+      else Profile.recordLoss();
       statusEl.textContent = `Player ${result.winner} wins!`;
       highlightWin(result.line);
     }
@@ -86,4 +87,23 @@ function resetGame() {
 boardEl.addEventListener('click', handleMove);
 resetBtn.addEventListener('click', resetGame);
 
+function updateAuthUI(user) {
+  const display = document.getElementById('userDisplay');
+  const loginContainer = document.getElementById('loginContainer');
+  if (user) {
+    display.innerHTML = `
+      <a href="profile.html" class="user-compact user-link">
+        ${Profile.renderAvatar(user, 28)}
+        <span>${user.name}</span>
+      </a>
+    `;
+    loginContainer.innerHTML = '<button class="gbtn gbtn-sm" onclick="Auth.signOut();location.reload()">Sign Out</button>';
+  } else {
+    display.innerHTML = '';
+    Auth.renderButton('loginContainer');
+  }
+}
+
+Auth.onAuthChange(updateAuthUI);
+updateAuthUI(Auth.getUser());
 init();

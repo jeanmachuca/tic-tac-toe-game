@@ -1,0 +1,100 @@
+const Auth = (() => {
+  let currentUser = null;
+  let listeners = [];
+
+  function loadSession() {
+    const raw = localStorage.getItem(APP_CONFIG.storageKey);
+    if (raw) {
+      try {
+        currentUser = JSON.parse(raw);
+      } catch { currentUser = null; }
+    }
+  }
+
+  function saveSession(user) {
+    currentUser = user;
+    if (user) {
+      localStorage.setItem(APP_CONFIG.storageKey, JSON.stringify(user));
+    } else {
+      localStorage.removeItem(APP_CONFIG.storageKey);
+    }
+  }
+
+  function notify() {
+    listeners.forEach(fn => fn(currentUser));
+  }
+
+  function getUser() { return currentUser; }
+
+  function onAuthChange(fn) {
+    listeners.push(fn);
+    if (currentUser) fn(currentUser);
+    return () => { listeners = listeners.filter(f => f !== fn); };
+  }
+
+  function signIn(credential) {
+    const payload = JSON.parse(atob(credential.split('.')[1]));
+    const user = {
+      uid: payload.sub,
+      name: payload.name,
+      email: payload.email,
+      photoURL: payload.picture,
+    };
+    saveSession(user);
+    notify();
+    return user;
+  }
+
+  function signOut() {
+    saveSession(null);
+    notify();
+    if (window.google?.accounts?.id) {
+      google.accounts.id.disableAutoSelect();
+    }
+  }
+
+  function renderButton(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    if (APP_CONFIG.googleClientId && window.google?.accounts?.id) {
+      google.accounts.id.initialize({
+        client_id: APP_CONFIG.googleClientId,
+        callback: ({ credential }) => { if (credential) signIn(credential); },
+      });
+      google.accounts.id.renderButton(container, {
+        theme: 'outline', size: 'large', width: 250,
+      });
+      google.accounts.id.prompt();
+    } else {
+      container.innerHTML = `
+        <button class="gbtn" onclick="Auth.guestSignIn()">
+          <svg width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+          Play as Guest
+        </button>
+      `;
+    }
+  }
+
+  function guestSignIn() {
+    const existing = localStorage.getItem(APP_CONFIG.storageKey);
+    if (existing) {
+      loadSession();
+      notify();
+      return;
+    }
+    const id = 'guest_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+    const user = {
+      uid: id,
+      name: 'Guest',
+      email: '',
+      photoURL: '',
+    };
+    saveSession(user);
+    notify();
+  }
+
+  loadSession();
+
+  return { getUser, onAuthChange, signIn, signOut, renderButton, guestSignIn };
+})();

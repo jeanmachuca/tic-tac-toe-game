@@ -5,10 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tic-Tac-Toe</title>
   <link rel="stylesheet" href="style.css">
+  <script src="config.js"></script>
 </head>
 <body>
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">Tic-Tac-Toe</a>
+    <div class="nav-right">
+      <span id="userDisplay" class="user-display"></span>
+      <div id="loginContainer"></div>
+    </div>
+  </nav>
+
   <div class="container">
-    <h1>Tic-Tac-Toe</h1>
     <div class="status" id="status">Player X's turn</div>
     <div class="board" id="board">
       <div class="cell" data-index="0"></div>
@@ -22,12 +30,16 @@
       <div class="cell" data-index="8"></div>
     </div>
     <div class="scoreboard">
-      <span>X: <span id="scoreX">0</span></span>
-      <span>O: <span id="scoreO">0</span></span>
+      <span>Wins: <span id="scoreWins">0</span></span>
+      <span>Losses: <span id="scoreLosses">0</span></span>
       <span>Draws: <span id="scoreDraw">0</span></span>
     </div>
     <button class="reset" id="resetBtn">New Game</button>
   </div>
+
+  <script src="https://accounts.google.com/gsi/client"></script>
+  <script src="auth.js"></script>
+  <script src="profile.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
