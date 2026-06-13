@@ -159,6 +159,56 @@ body {
   min-height: 1.6rem;
 }
 
+.mode-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.mode-btn,
+.diff-btn {
+  font-family: var(--font-display);
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: rgba(255,255,255,0.03);
+  color: var(--text-secondary);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.mode-btn:hover,
+.diff-btn:hover {
+  background: rgba(255,255,255,0.07);
+}
+
+.mode-btn.active,
+.diff-btn.active {
+  background: rgba(255,255,255,0.08);
+  color: var(--text-primary);
+  border-color: rgba(255,255,255,0.15);
+  box-shadow: 0 0 12px rgba(255,255,255,0.04);
+}
+
+.diff-group {
+  display: none;
+  gap: 0.3rem;
+  margin-left: 0.3rem;
+  padding-left: 0.6rem;
+  border-left: 1px solid rgba(255,255,255,0.08);
+}
+
+.diff-group.visible {
+  display: flex;
+}
+
 .board {
   position: relative;
   display: grid;
