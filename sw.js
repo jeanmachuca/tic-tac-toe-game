@@ -1,4 +1,4 @@
-const CACHE = 'tictactoe-v1';
+const CACHE = 'tictactoe-v2';
 const PRECACHE = [
   '/tic-tac-toe-game/',
   '/tic-tac-toe-game/index.html',
@@ -8,6 +8,7 @@ const PRECACHE = [
   '/tic-tac-toe-game/auth.js',
   '/tic-tac-toe-game/profile.js',
   '/tic-tac-toe-game/config.js',
+  '/tic-tac-toe-game/ai.js',
   '/tic-tac-toe-game/favicon.svg',
   '/tic-tac-toe-game/icon-192.svg',
   '/tic-tac-toe-game/icon-512.svg',

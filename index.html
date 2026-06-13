@@ -28,6 +28,15 @@
   <main class="game-wrapper">
     <div class="game-container">
       <div class="status" id="status">Player X's turn</div>
+      <div class="mode-bar">
+        <button class="mode-btn active" data-mode="2p" onclick="setMode('2p')">2 Players</button>
+        <button class="mode-btn" data-mode="cpu" onclick="setMode('cpu')">vs CPU</button>
+        <span class="diff-group" id="diffGroup">
+          <button class="diff-btn active" data-diff="easy" onclick="setDifficulty('easy')">Easy</button>
+          <button class="diff-btn" data-diff="normal" onclick="setDifficulty('normal')">Normal</button>
+          <button class="diff-btn" data-diff="hard" onclick="setDifficulty('hard')">Hard</button>
+        </span>
+      </div>
       <div class="board" id="board">
         <div class="cell" data-index="0"></div>
         <div class="cell" data-index="1"></div>
@@ -52,6 +61,7 @@
   <script src="https://accounts.google.com/gsi/client"></script>
   <script src="auth.js"></script>
   <script src="profile.js"></script>
+  <script src="ai.js"></script>
   <script src="script.js"></script>
   <script>
     if ('serviceWorker' in navigator) {
