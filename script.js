@@ -8,12 +8,28 @@ const winLineEl = document.getElementById('winLine');
 const parallaxBg = document.getElementById('parallaxBg');
 
 let board, currentPlayer, gameActive;
+let gameMode = '2p';
+let difficulty = 'easy';
+let aiTimeout = null;
 
 const winPatterns = [
   [0,1,2], [3,4,5], [6,7,8],
   [0,3,6], [1,4,7], [2,5,8],
   [0,4,8], [2,4,6],
 ];
+
+function setMode(mode) {
+  gameMode = mode;
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+  document.getElementById('diffGroup').classList.toggle('visible', mode === 'cpu');
+  resetGame();
+}
+
+function setDifficulty(diff) {
+  difficulty = diff;
+  document.querySelectorAll('.diff-btn').forEach(b => b.classList.toggle('active', b.dataset.diff === diff));
+  resetGame();
+}
 
 function init() {
   board = Array(9).fill(null);
@@ -35,9 +51,11 @@ function render() {
       cell.classList.add('pop-in');
     }
   });
-  statusEl.textContent = gameActive
-    ? `Player ${currentPlayer}'s turn`
-    : statusEl.textContent;
+  if (gameActive) {
+    statusEl.textContent = gameMode === 'cpu'
+      ? (currentPlayer === 'X' ? "Your turn" : "Computer's turn...")
+      : `Player ${currentPlayer}'s turn`;
+  }
   const stats = Profile.getStats();
   scoreWinsEl.textContent = stats.wins;
   scoreLossesEl.textContent = stats.losses;
@@ -81,16 +99,8 @@ function highlightWin(line) {
   requestAnimationFrame(() => winLineEl.classList.add('visible'));
 }
 
-function handleMove(e) {
-  const cell = e.target.closest('.cell');
-  if (!cell || !gameActive) return;
-  const index = parseInt(cell.dataset.index);
-  if (board[index]) return;
-
-  board[index] = currentPlayer;
-  cell.classList.add('pop-in');
+function afterMove() {
   const result = checkWinner();
-
   if (result) {
     gameActive = false;
     if (result.winner === 'draw') {
@@ -100,20 +110,49 @@ function handleMove(e) {
       if (result.winner === 'X') Profile.recordWin();
       else Profile.recordLoss();
       statusEl.textContent = `Player ${result.winner} wins!`;
-      highlightWin(result.line);
+      if (result.line) highlightWin(result.line);
     }
-  } else {
-    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+    render();
+    return true;
   }
+  currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
   render();
+  return false;
+}
+
+function triggerAiMove() {
+  if (!gameActive || currentPlayer !== 'O' || gameMode !== 'cpu') return;
+  aiTimeout = setTimeout(() => {
+    if (!gameActive) return;
+    const index = AI.getMove(board, difficulty, 'O');
+    if (index === null || index === undefined) return;
+    board[index] = 'O';
+    const cell = document.querySelector(`.cell[data-index="${index}"]`);
+    if (cell) cell.classList.add('pop-in');
+    afterMove();
+  }, 400);
+}
+
+function handleMove(e) {
+  const cell = e.target.closest('.cell');
+  if (!cell || !gameActive) return;
+  const index = parseInt(cell.dataset.index);
+  if (board[index]) return;
+  if (gameMode === 'cpu' && currentPlayer === 'O') return;
+
+  board[index] = currentPlayer;
+  cell.classList.add('pop-in');
+  const ended = afterMove();
+  if (!ended && gameMode === 'cpu') triggerAiMove();
 }
 
 function resetGame() {
+  if (aiTimeout) { clearTimeout(aiTimeout); aiTimeout = null; }
   board = Array(9).fill(null);
   currentPlayer = 'X';
   gameActive = true;
   winLineEl.classList.remove('visible');
-  statusEl.textContent = "Player X's turn";
+  statusEl.textContent = gameMode === 'cpu' ? "Your turn" : "Player X's turn";
   document.querySelectorAll('.cell').forEach(c => {
     c.classList.remove('x', 'o', 'taken', 'win', 'fade', 'pop-in');
   });
@@ -127,6 +166,7 @@ const cellEls = document.querySelectorAll('.cell');
 cellEls.forEach(cell => {
   cell.addEventListener('mouseenter', () => {
     if (!gameActive || board[cell.dataset.index]) return;
+    if (gameMode === 'cpu' && currentPlayer === 'O') return;
     cell.classList.add('hover-' + currentPlayer.toLowerCase());
   });
   cell.addEventListener('mouseleave', () => {
