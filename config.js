@@ -1,5 +1,5 @@
 const APP_CONFIG = {
-  googleClientId: '709324749812-r7etq64p0rcpovilqv6vf63q9d7bgsh7.apps.googleusercontent.com',
+  googleClientId: '__GOOGLE_CLIENT_ID__',
   storageKey: 'tictactoe_profile',
   appName: 'Tic-Tac-Toe',
 };
