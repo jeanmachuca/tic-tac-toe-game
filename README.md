@@ -22,6 +22,7 @@ reference for AI-assisted development.
 | 4 | *Add an AI opponent with difficulty levels* | Minimax AI (easy/normal/hard), mode toggle |
 | 5 | *Make it a PWA* | Service worker, manifest, SVG icons |
 | 6 | *Move Google credentials to secrets* | GitHub Actions deploy, secret injection |
+| — | **[TUTORIAL.md](TUTORIAL.md)** | Intent–Result Alignment prompting guide |
 
 ---
 
